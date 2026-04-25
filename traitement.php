@@ -17,7 +17,8 @@ if (empty($_POST['h-captcha-response'])) {
     die("Erreur : merci de valider le captcha.");
 }
 
-$secret   = 'ES_52940f897a9248b0bbe7018b819b843b';
+require 'config.php';
+$secret = HCAPTCHA_SECRET;
 $response = $_POST['h-captcha-response'];
 $verify   = file_get_contents("https://api.hcaptcha.com/siteverify?secret={$secret}&response={$response}");
 $result   = json_decode($verify);

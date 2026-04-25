@@ -1,3 +1,4 @@
 connexion.php
+config.php
 *.log
 .DS_Store
