@@ -1,0 +1,13 @@
+# Masquer la version de PHP
+Header unset X-Powered-By
+
+# Empêcher l'accès aux fichiers sensibles
+<Files "connexion.php">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ".gitignore">
+    Order allow,deny
+    Deny from all
+</Files>
