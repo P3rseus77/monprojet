@@ -1,0 +1,301 @@
+/* Reset de base - efface les styles par défaut du navigateur */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Variables de couleurs - on change ici, ça change partout */
+:root {
+    --couleur-primaire: #2c3e50;
+    --couleur-accent: #22e64d;
+    --couleur-clair: #ecf0f1;
+    --couleur-texte: #f47004;
+}
+
+/* Typographie générale */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--couleur-texte);
+    line-height: 1.6;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--couleur-primaire);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+nav ul a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+nav ul a:hover {
+    color: var(--couleur-accent);
+}
+
+/* Hero */
+.hero {
+    background-image: url('images/hero.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-overlay {
+    background: rgba(44, 62, 80, 0.7);
+    padding: 4rem 2rem;
+    text-align: center;
+    width: 100%;
+    color: rgb(254, 117, 4);
+}
+
+.hero-overlay h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-overlay p {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    opacity: 0.85;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    opacity: 0.85;
+}
+
+/* Bouton */
+.bouton {
+    background-color: var(--couleur-accent);
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: transform 0.3s, opacity 0.3s;
+    display: inline-block;
+}
+
+.bouton:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* Section services */
+.services {
+    padding: 4rem 2rem;
+    text-align: center;
+    background-color: var(--couleur-clair);
+}
+
+.services h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--couleur-primaire);
+}
+
+/* Grille CSS - la magie du responsive */
+.grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Cartes */
+.carte {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.carte:hover {
+    transform: translateY(-5px);
+}
+
+.carte h3 {
+    color: var(--couleur-accent);
+    margin-bottom: 1rem;
+}
+
+.carte img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Footer */
+footer {
+    background-color: var(--couleur-primaire);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+}
+/* À propos */
+.apropos {
+    padding: 4rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.apropos-contenu {
+    display: flex;
+    gap: 4rem;
+    align-items: center;
+}
+
+.apropos-texte {
+    flex: 1;
+}
+
+.apropos-texte h2 {
+    font-size: 2rem;
+    color: var(--couleur-primaire);
+    margin-bottom: 1rem;
+}
+
+.apropos-texte p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.apropos-image {
+    flex: 1;
+}
+
+.apropos-image img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+/* Contact */
+.contact {
+    padding: 4rem 2rem;
+}
+
+.formulaire-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.champ {
+    margin-bottom: 1.5rem;
+}
+
+.champ label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--couleur-primaire);
+}
+
+.champ input,
+.champ textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.champ input:focus,
+.champ textarea:focus {
+    outline: none;
+    border-color: var(--couleur-accent);
+}
+
+button.bouton {
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 1rem;
+}
+
+/* =============================
+   RESPONSIVE MOBILE
+   ============================= */
+
+@media (max-width: 768px) {
+
+    /* Navigation en colonne */
+    nav {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    /* Hero plus compact */
+    .hero-overlay h1 {
+        font-size: 2rem;
+    }
+
+    .hero-overlay p {
+        font-size: 1rem;
+    }
+
+    /* Grille en colonne unique */
+    .grille {
+        grid-template-columns: 1fr;
+    }
+
+    /* À propos empilé */
+    .apropos-contenu {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    /* Formulaire pleine largeur */
+    .formulaire-wrapper {
+        padding: 1.5rem;
+    }
+}
