@@ -21,14 +21,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([':login' => $login]);
     $admin = $stmt->fetch();
 
-    // Vérification du mot de passe hashé
-    if ($admin && hash('sha256', $password) === $admin['password']) {
-        $_SESSION['admin'] = $admin['login'];
-        header("Location: admin.php");
-        exit();
-    } else {
-        $erreur = "Identifiants incorrects.";
-    }
+   // Vérification du mot de passe bcrypt
+if ($admin && password_verify($password, $admin['password'])) {
+    $_SESSION['admin'] = $admin['login'];
+    header("Location: admin.php");
+    exit();
+} else {
+    $erreur = "Identifiants incorrects.";
+}
 }
 ?>
 <!DOCTYPE html>
