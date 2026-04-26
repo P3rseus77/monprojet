@@ -28,6 +28,47 @@
     </div>
 </header>
 
+<!-- Carousel -->
+<section class="carousel-section">
+    <div class="carousel">
+        <div class="slide active">
+            <img src="images/service1.jpg" alt="Services">
+            <div class="slide-overlay">
+                <h2>Nos Services</h2>
+                <p>Decouvrez tout ce que nous pouvons faire pour vous</p>
+                <a href="services.html" class="bouton">Voir les services</a>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="images/service2.jpg" alt="A propos">
+            <div class="slide-overlay">
+                <h2>A Propos</h2>
+                <p>Qui sommes-nous et ce qui nous motive</p>
+                <a href="apropos.html" class="bouton">En savoir plus</a>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="images/service3.jpg" alt="Contact">
+            <div class="slide-overlay">
+                <h2>Contactez-nous</h2>
+                <p>On se parle et on construit quelque chose ensemble</p>
+                <a href="contact.php" class="bouton">Prendre contact</a>
+            </div>
+        </div>
+
+        <!-- Flèches -->
+        <button class="carousel-btn prev">&#8592;</button>
+        <button class="carousel-btn next">&#8594;</button>
+
+        <!-- Points -->
+        <div class="carousel-dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+</section>
+
     <!-- Section services -->
     <section class="services">
         <h2>Mes services</h2>
@@ -54,6 +95,41 @@
     <footer>
         <p>© 2026 MonSite — Tous droits réservés</p>
     </footer>
+
+    <script>
+    const slides = document.querySelectorAll('.slide');
+    const dots   = document.querySelectorAll('.dot');
+    let current  = 0;
+    let timer;
+
+    function goTo(n) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    function startTimer() {
+        timer = setInterval(next, 4000);
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        startTimer();
+    }
+
+    document.querySelector('.next').addEventListener('click', () => { next(); resetTimer(); });
+    document.querySelector('.prev').addEventListener('click', () => { prev(); resetTimer(); });
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => { goTo(i); resetTimer(); });
+    });
+
+    startTimer();
+</script>
 
 </body>
 </html>
