@@ -43,6 +43,30 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 $total    = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 $non_lus  = $pdo->query("SELECT COUNT(*) FROM messages WHERE lu = 0")->fetchColumn();
 
+// Statistiques par mois
+$stats = $pdo->query("
+    SELECT 
+        CONCAT(CASE MONTH(date_envoi)
+            WHEN 1 THEN 'Janvier'
+            WHEN 2 THEN 'Fevrier'
+            WHEN 3 THEN 'Mars'
+            WHEN 4 THEN 'Avril'
+            WHEN 5 THEN 'Mai'
+            WHEN 6 THEN 'Juin'
+            WHEN 7 THEN 'Juillet'
+            WHEN 8 THEN 'Aout'
+            WHEN 9 THEN 'Septembre'
+            WHEN 10 THEN 'Octobre'
+            WHEN 11 THEN 'Novembre'
+            WHEN 12 THEN 'Decembre'
+        END, ' ', YEAR(date_envoi)) as mois,
+        COUNT(*) as total
+    FROM messages 
+    GROUP BY YEAR(date_envoi), MONTH(date_envoi)
+    ORDER BY YEAR(date_envoi) DESC, MONTH(date_envoi) DESC
+    LIMIT 6
+")->fetchAll();
+
 // Messages
 $stmt = $pdo->query("SELECT * FROM messages ORDER BY lu ASC, date_envoi DESC");
 $messages = $stmt->fetchAll();
@@ -188,6 +212,25 @@ $messages = $stmt->fetchAll();
                 <div class="label">Lus</div>
             </div>
         </div>
+
+        <!-- Statistiques -->
+<div class="stats-section">
+    <h3>Messages par mois</h3>
+    <div class="stats-barres">
+        <?php 
+        $max = max(array_column($stats, 'total'));
+        foreach ($stats as $stat): 
+            $hauteur = $max > 0 ? ($stat['total'] / $max) * 100 : 0;
+        ?>
+        <div class="barre-wrapper">
+            <div class="barre" style="height: <?php echo $hauteur; ?>%">
+                <span class="barre-valeur"><?php echo $stat['total']; ?></span>
+            </div>
+            <div class="barre-label"><?php echo $stat['mois']; ?></div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>
 
         <?php if (empty($messages)): ?>
             <div class="aucun-message">📭 Aucun message pour l'instant.</div>
