@@ -1,7 +1,8 @@
-<?php
+﻿<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 session_start();
 
-// Si déjà connecté, rediriger vers le back office
 if (isset($_SESSION['admin'])) {
     header("Location: admin.php");
     exit();
@@ -13,22 +14,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require 'config.php';
     require 'connexion.php';
 
-    $login    = htmlspecialchars(trim($_POST['login']));
-    $password = $_POST['password'];
+    $ip = $_SERVER['REMOTE_ADDR'];
 
-    // Recherche de l'admin en BDD
-    $stmt = $pdo->prepare("SELECT * FROM admins WHERE login = :login");
-    $stmt->execute([':login' => $login]);
-    $admin = $stmt->fetch();
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) FROM tentatives_login 
+        WHERE ip = :ip 
+        AND created_at > DATE_SUB(NOW(), INTERVAL 15 MINUTE)
+    ");
+    $stmt->execute([':ip' => $ip]);
+    $nb_tentatives = $stmt->fetchColumn();
 
-   // Vérification du mot de passe bcrypt
-if ($admin && password_verify($password, $admin['password'])) {
-    $_SESSION['admin'] = $admin['login'];
-    header("Location: admin.php");
-    exit();
-} else {
-    $erreur = "Identifiants incorrects.";
-}
+    if ($nb_tentatives >= 5) {
+        $erreur = "Trop de tentatives. Reessayez dans 15 minutes.";
+    } else {
+
+        $login    = htmlspecialchars(trim($_POST['login']));
+        $password = $_POST['password'];
+
+        $stmt = $pdo->prepare("SELECT * FROM admins WHERE login = :login");
+        $stmt->execute([':login' => $login]);
+        $admin = $stmt->fetch();
+
+        if ($admin && password_verify($password, $admin['password'])) {
+            $pdo->prepare("DELETE FROM tentatives_login WHERE ip = :ip")
+                ->execute([':ip' => $ip]);
+            $_SESSION['admin'] = $admin['login'];
+            header("Location: admin.php");
+            exit();
+        } else {
+            $pdo->prepare("INSERT INTO tentatives_login (ip, created_at) VALUES (:ip, NOW())")
+                ->execute([':ip' => $ip]);
+            $erreur = "Identifiants incorrects. Tentative " . ($nb_tentatives + 1) . "/5";
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -44,7 +62,7 @@ if ($admin && password_verify($password, $admin['password'])) {
     <header class="hero">
         <div class="hero-overlay">
             <h1>Administration</h1>
-            <p>Accès réservé</p>
+            <p>Acces reserve</p>
         </div>
     </header>
 
