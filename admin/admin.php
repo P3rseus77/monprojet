@@ -4,17 +4,17 @@ session_start();
 if (isset($_SESSION['last_activity']) && 
     (time() - $_SESSION['last_activity'] > 1800)) {
     session_destroy();
-    header("Location: login.php?expire=1");
+    header("Location: /admin/login.php?expire=1");
     exit();
 }
 $_SESSION['last_activity'] = time();
 
 if (!isset($_SESSION['admin'])) {
-    header("Location: login.php");
+    header("Location: /admin/login.php");
     exit();
 }
 
-require 'connexion.php';
+require '../connexion.php';
 
 // Actions
 if (isset($_GET['action']) && isset($_GET['id'])) {
@@ -35,7 +35,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
             ->execute([':id' => $id]);
     }
     
-    header("Location: admin.php");
+    header("Location: /admin/admin.php");
     exit();
 }
 
@@ -53,7 +53,7 @@ $messages = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
     <style>
         .admin-wrapper {
             max-width: 1200px;
@@ -163,8 +163,8 @@ $messages = $stmt->fetchAll();
     <nav>
         <div class="logo">MonSite — Admin</div>
         <ul>
-            <li><a href="index.html">Voir le site</a></li>
-            <li><a href="logout.php" style="color:var(--couleur-accent)">Deconnexion</a></li>
+            <li><a href="../index.html">Voir le site</a></li>
+            <li><a href="/admin/logout.php" style="color:var(--couleur-accent)">Deconnexion</a></li>
         </ul>
     </nav>
 
@@ -216,11 +216,11 @@ $messages = $stmt->fetchAll();
                         <td>
                             <div class="actions">
                                 <?php if (!$msg['lu']): ?>
-                                    <a href="admin.php?action=lu&id=<?php echo $msg['id']; ?>" class="btn btn-lu">✅ Lu</a>
+                                    <a href="/admin/admin.php?action=lu&id=<?php echo $msg['id']; ?>" class="btn btn-lu">✅ Lu</a>
                                 <?php else: ?>
-                                    <a href="admin.php?action=nonlu&id=<?php echo $msg['id']; ?>" class="btn btn-nonlu">↩️ Non lu</a>
+                                    <a href="/admin/admin.php?action=nonlu&id=<?php echo $msg['id']; ?>" class="btn btn-nonlu">↩️ Non lu</a>
                                 <?php endif; ?>
-                                <a href="admin.php?action=supprimer&id=<?php echo $msg['id']; ?>" 
+                                <a href="/admin/admin.php?action=supprimer&id=<?php echo $msg['id']; ?>" 
                                    class="btn btn-supprimer"
                                    onclick="return confirm('Supprimer ce message ?')">🗑️ Supprimer</a>
                             </div>

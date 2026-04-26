@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['2fa_code'])) {
-    header("Location: login.php");
+    header("Location: /admin/login.php");
     exit();
 }
 
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verification expiration 10 minutes
     if (time() > $_SESSION['2fa_expire']) {
         session_destroy();
-        header("Location: login.php?expire=1");
+        header("Location: /admin/login.php?expire=1");
         exit();
     }
     
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['admin'] = $_SESSION['2fa_login'];
         $_SESSION['last_activity'] = time();
         unset($_SESSION['2fa_login']);
-        header("Location: admin.php");
+        header("Location: /admin/admin.php");
         exit();
     } else {
         $erreur = "Code incorrect. Reessayez.";
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verification 2FA</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <form action="verification.php" method="POST">
+            <form action="/admin/verification.php" method="POST">
                 <div class="champ">
                     <label for="code">Code a 6 chiffres</label>
                     <input type="text" id="code" name="code" required 

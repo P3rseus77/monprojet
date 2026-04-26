@@ -4,15 +4,15 @@ error_reporting(E_ALL);
 session_start();
 
 if (isset($_SESSION['admin'])) {
-    header("Location: admin.php");
+    header("Location: /admin/admin.php");
     exit();
 }
 
 $erreur = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require 'config.php';
-    require 'connexion.php';
+    require '../config.php';
+    require '../connexion.php';
 
     $ip = $_SERVER['REMOTE_ADDR'];
 
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ->execute([':ip' => $ip]);
 
             // Envoi du code par email
-            require 'email.php';
+            require '../email.php';
             $sujet = "Code de connexion : " . $code;
             $corps = "Votre code de verification est : " . $code . "\n\nIl expire dans 10 minutes.";
             envoyerEmail(SMTP_USER, $sujet, $corps);
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Admin</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <form action="login.php" method="POST">
+            <form action="/admin/login.php" method="POST">
                 <div class="champ">
                     <label for="login">Identifiant</label>
                     <input type="text" id="login" name="login" required placeholder="admin">
