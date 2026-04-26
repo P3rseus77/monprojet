@@ -1,6 +1,20 @@
 <?php
 session_start();
 
+// Expiration apres 30 minutes d'inactivite
+if (isset($_SESSION['last_activity']) && 
+    (time() - $_SESSION['last_activity'] > 1800)) {
+    session_destroy();
+    header("Location: login.php?expire=1");
+    exit();
+}
+$_SESSION['last_activity'] = time();
+
+if (!isset($_SESSION['admin'])) {
+    header("Location: login.php");
+    exit();
+}
+
 // Protection — si pas connecté, retour au login
 if (!isset($_SESSION['admin'])) {
     header("Location: login.php");

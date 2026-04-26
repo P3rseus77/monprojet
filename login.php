@@ -76,6 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
+            <?php if (isset($_GET['expire'])): ?>
+    <div style="background:#e67e22;color:white;padding:1rem;border-radius:8px;margin-bottom:1.5rem;text-align:center;">
+        ⏱️ Session expiree. Reconnectez-vous.
+    </div>
+<?php endif; ?>
+
             <form action="login.php" method="POST">
                 <div class="champ">
                     <label for="login">Identifiant</label>
