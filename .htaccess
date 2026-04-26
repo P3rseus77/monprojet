@@ -11,3 +11,5 @@ Header unset X-Powered-By
     Order allow,deny
     Deny from all
 </Files>
+
+ErrorDocument 404 /404.php
