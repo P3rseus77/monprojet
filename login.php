@@ -36,10 +36,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $admin = $stmt->fetch();
 
         if ($admin && password_verify($password, $admin['password'])) {
+            // Mot de passe correct - generation du code 2FA
+            $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+            
+            $_SESSION['2fa_code']   = $code;
+            $_SESSION['2fa_expire'] = time() + 600;
+            $_SESSION['2fa_login']  = $admin['login'];
+
+            // Suppression des tentatives
             $pdo->prepare("DELETE FROM tentatives_login WHERE ip = :ip")
                 ->execute([':ip' => $ip]);
-            $_SESSION['admin'] = $admin['login'];
-            header("Location: admin.php");
+
+            // Envoi du code par email
+            require 'email.php';
+            $sujet = "Code de connexion : " . $code;
+            $corps = "Votre code de verification est : " . $code . "\n\nIl expire dans 10 minutes.";
+            envoyerEmail(SMTP_USER, $sujet, $corps);
+
+            header("Location: verification.php");
             exit();
         } else {
             $pdo->prepare("INSERT INTO tentatives_login (ip, created_at) VALUES (:ip, NOW())")
@@ -70,17 +84,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="formulaire-wrapper">
             <h2 style="text-align:center;margin-bottom:2rem;color:var(--couleur-primaire)">Connexion</h2>
 
+            <?php if (isset($_GET['expire'])): ?>
+                <div style="background:#e67e22;color:white;padding:1rem;border-radius:8px;margin-bottom:1.5rem;text-align:center;">
+                    Session expiree. Reconnectez-vous.
+                </div>
+            <?php endif; ?>
+
             <?php if ($erreur): ?>
                 <div style="background:#e74c3c;color:white;padding:1rem;border-radius:8px;margin-bottom:1.5rem;text-align:center;">
                     ❌ <?php echo $erreur; ?>
                 </div>
             <?php endif; ?>
-
-            <?php if (isset($_GET['expire'])): ?>
-    <div style="background:#e67e22;color:white;padding:1rem;border-radius:8px;margin-bottom:1.5rem;text-align:center;">
-        ⏱️ Session expiree. Reconnectez-vous.
-    </div>
-<?php endif; ?>
 
             <form action="login.php" method="POST">
                 <div class="champ">
@@ -97,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </section>
 
     <footer>
-        <p>© 2026 MonSite — Tous droits réservés</p>
+        <p>© 2026 MonSite — Tous droits reserves</p>
     </footer>
 
 </body>
